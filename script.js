@@ -26,7 +26,6 @@ function createPass() {
     password = password + allChars[Math.floor(Math.random() * allChars.length)];
   }
   passBox.value = password;
-  savePasswordToLocalStorage(password); // localstorage
   copy.setAttribute("aria-disabled", "false"); // teoretycznie zabezpieczenie przed pustym li po resecie, ale do sprawdzenia
 }
 
@@ -37,38 +36,39 @@ let lastCopiedPassword = "";
 function copyPass() {
   const newPassword = passBox.value;
   //zabezpieczenie przed duplikacją
-  if (newPassword !== lastCopiedPassword) {
-    navigator.clipboard.writeText(newPassword).then(
-      () => {
-        tooltip.style.display = "block";
-        setTimeout(function () {
-          tooltip.style.display = "none";
-        }, 2000); //asynchroniczny tooltip
 
-        const passwordList = document.getElementById("password-list");
-        const lastPasswords = document.getElementById("last-passwords");
-        const listItem = document.createElement("li");
+  navigator.clipboard.writeText(newPassword).then(
+    () => {
+      tooltip.style.display = "block";
+      setTimeout(function () {
+        tooltip.style.display = "none";
+      }, 2000); //asynchroniczny tooltip
 
-        listItem.textContent = newPassword;
-        passwordList.appendChild(listItem);
-        passwordList.insertBefore(listItem, passwordList.firstChild); // Dodanie nowego hasła na początek listy
+      if (newPassword === lastCopiedPassword) return;
+      if (!newPassword) return;
+      const passwordList = document.getElementById("password-list");
+      const lastPasswords = document.getElementById("last-passwords");
+      const listItem = document.createElement("li");
 
-        const listItems = passwordList.getElementsByTagName("li");
-        // ustawienie limitu dla wyświetlanych li do 5
-        if (listItems.length > 5) {
-          passwordList.removeChild(listItems[5]); // usuwanie najstarszego elementu z listy
-        }
+      listItem.textContent = newPassword;
+      passwordList.appendChild(listItem);
+      passwordList.insertBefore(listItem, passwordList.firstChild); // Dodanie nowego hasła na początek listy
 
-        lastPasswords.style.display = "block";
-
-        lastCopiedPassword = newPassword;
-        savePasswordToLocalStorage(newPassword); // localstorage
-      },
-      () => {
-        console.error("Failed to copy");
+      const listItems = passwordList.getElementsByTagName("li");
+      // ustawienie limitu dla wyświetlanych li do 5
+      if (listItems.length > 5) {
+        passwordList.removeChild(listItems[5]); // usuwanie najstarszego elementu z listy
       }
-    );
-  }
+
+      lastPasswords.style.display = "block";
+
+      lastCopiedPassword = newPassword;
+      savePasswordToLocalStorage(newPassword); // localstorage
+    },
+    () => {
+      console.error("Failed to copy");
+    }
+  );
 }
 
 copy.addEventListener("click", copyPass);
