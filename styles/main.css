@@ -154,6 +154,7 @@ p,
   display: none;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   margin-top: -28rem;
 }
 .last-passwords h2 {
