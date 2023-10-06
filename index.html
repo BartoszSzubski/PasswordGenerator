@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="tooltipclear" class="tooltipclear">
+        Data deleted successfully!
+      </div>
+      <button id="clear-button">Clear</button>
+
+      <p>
+        <span class="genspan">Generate</span> your
+        <span class="newspan">new password</span> here!
+      </p>
+      <div class="display">
+        <input type="text" id="password" placeholder="password" />
+
+        <div class="tooltip-container">
+          <img
+            src="images/copy.png"
+            alt="copy password image"
+            id="copy"
+            aria-disabled="true"
+          />
+          <div id="tooltip" class="tooltip">Password copied!</div>
+        </div>
+      </div>
+
+      <button id="button">
+        <img src="images/generate.png" alt="generate random password image" />
+        <span class="spanbutton">Generate</span>
+      </button>
+    </div>
+
+    <div class="last-passwords" id="last-passwords">
+      <h2>Last passwords:</h2>
+      <ul id="password-list"></ul>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
