@@ -32,6 +32,7 @@ function createPass() {
 button.addEventListener("click", createPass);
 
 let lastCopiedPassword = "";
+let tooltipTimeOut;
 
 function copyPass() {
   const newPassword = passBox.value;
@@ -40,14 +41,15 @@ function copyPass() {
   navigator.clipboard.writeText(newPassword).then(
     () => {
       tooltip.style.display = "block";
-      setTimeout(function () {
+      if (tooltipTimeOut) clearTimeout(tooltipTimeOut); //reset
+      tooltipTimeOut = setTimeout(function () {
         tooltip.style.display = "none";
       }, 2000); //asynchroniczny tooltip
 
       if (newPassword === lastCopiedPassword) return;
       if (!newPassword) return;
       const passwordList = document.getElementById("password-list");
-      const lastPasswords = document.getElementById("last-passwords");
+      const lastPasswords = document.querySelector(".last-passwords h2");
       const listItem = document.createElement("li");
 
       listItem.textContent = newPassword;
@@ -92,7 +94,7 @@ function savePasswordToLocalStorage(password) {
 function loadPasswordsFromLocalStorage() {
   const passwords = JSON.parse(localStorage.getItem("passwords")) || [];
   const passwordList = document.getElementById("password-list");
-  const lastPasswords = document.getElementById("last-passwords");
+  const lastPasswords = document.querySelector(".last-passwords h2");
 
   // wypełnij listę haseł zapisanymi hasłami
   passwords.forEach((password) => {
@@ -112,9 +114,12 @@ window.addEventListener("load", loadPasswordsFromLocalStorage);
 
 function clearPassword() {
   const passwordList = document.getElementById("password-list");
+  const lastPasswords = document.querySelector(".last-passwords h2");
   localStorage.removeItem("passwords");
   passwordList.innerHTML = "";
   passBox.value = "";
+
+  lastPasswords.style.display = "none";
 
   tooltipclear.style.display = "block";
   setTimeout(function () {
@@ -128,10 +133,3 @@ const clearButton = document.getElementById("clear-button");
 clearButton.addEventListener("click", () => {
   clearPassword();
 });
-// tu jeszcze dodać żeby ten przycisk był w html i żeby pojawiał się dopiero jak będzie jakieś hasło w kodzie ale pojebane tu już jest xd
-
-//generalnie:
-//nie pozwól kopiować hasła przed wygenerowaniem go
-//napraw to new password h2
-//ogarnij gita
-//dodaj if do funkcji clearpassword w razie jakby nie było zadnych haseł i input był pusty żeby wyskakiwał taki tooltip że pole jest puste
